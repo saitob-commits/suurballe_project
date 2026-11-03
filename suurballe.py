@@ -40,6 +40,52 @@ import pygame    # the game/graphics library (installed with pip, see above)
 import math
 import defaultdict from collections
 
+from heapq import heapify, heappop, heappush
+
+
+def dijkstra_heap(G, s):
+    
+    # graph G, start node s
+    # uses HEAP to speed up min spanning edge
+    # return dictionary of distance to each other node
+    
+    E = set()
+    E.add(s)
+    p = dict()
+    p[s] = [s]
+    d = dict()
+    d[s] = 0
+    edge = []
+    for initial in G[s]:
+        together = (initial[1], s, initial[0])
+        edge.append(together)
+        
+    heapify(edge)
+    
+    while edge:
+        v = heappop(edge)
+        
+        if v[2] not in E:
+            E.add(v[2])
+            d[v[2]] = v[0]
+            p[v[2]] = p[v[1]] + [v[2]]
+            
+            for values in G[v[2]]:
+                if values[0] not in E:
+                    heappush(edge, (v[0] + values[1], v[2], values[0]))
+        continue
+    return p
+
+def suurballe(G, start, final):
+    paths = dijkstra_heap(G, start)
+    first_path = paths[final]
+    graph = G.copy()
+    for i in range(0, len(first_path)-1):
+        graph[first_path[i]] = [(node, distance) for node, distance in graoh[i] if node != first_path[i+1]]
+
+
+
+
 # pygame.init() starts up all of PyGame's modules (display, fonts, sound,
 # etc.). It must be called before you use almost anything else in PyGame.
 pygame.init()
@@ -419,3 +465,4 @@ def main():
 # (not when it is imported by another file).
 if __name__ == "__main__":
     main()
+
