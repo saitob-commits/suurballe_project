@@ -81,8 +81,28 @@ def suurballe(G, start, final):
     first_path = paths[final]
     graph = G.copy()
     for i in range(0, len(first_path)-1):
-        graph[first_path[i]] = [(node, distance) for node, distance in graoh[i] if node != first_path[i+1]]
+        graph[first_path[i]] = [(node, distance) for node, distance in graph[i] if node != first_path[i+1]]
+        graph[first_path[i+1]] = (first_path[i],0)
+    path_2 = dijkstra_heap(G, start)
+    second_path = path_2[final]
 
+    for i in range(0, len(first_path) - 1):
+        if first_path[i] in second_path:
+            if first_path[i+1] == second_path[second_path.index(first_path[i]) - 1]:
+                graph[first_path[i]].remove(first_path[i+1])
+                graph[first_path[i+1]].remove(first_path[i])
+
+    output = defaultdict(list)
+
+    for i in range(0, len(first_path)):
+        if first_path[i+1] in graph[first_path[i]]:
+            output[first_path[i]].append(first_path[i+1])
+
+    for i in range(0, len(second_path)):
+        if second_path[i+1] in graph[second_path[i]]:
+            output[second_path[i]].append(second_path[i+1])
+            
+    return output
 
 
 
