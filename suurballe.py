@@ -38,7 +38,7 @@ HOW TO RUN THIS FILE
 import sys       # used to exit the program cleanly with sys.exit()
 import pygame    # the game/graphics library (installed with pip, see above)
 import math
-import defaultdict from collections
+from collections import defaultdict
 
 from heapq import heapify, heappop, heappush
 
