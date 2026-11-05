@@ -8,10 +8,10 @@ from heapq import heapify, heappop, heappush
 def dijkstra_heap(G, s):
     E = set()
     E.add(s)
-    p = dict()
-    p[s] = [s]
-    d = dict()
-    d[s] = 0
+    paths = dict()
+    paths[s] = [s]
+    distances = dict()
+    distances[s] = 0
     edge = []
     for initial in G[s]:
         together = (initial[1], s, initial[0])
@@ -21,13 +21,13 @@ def dijkstra_heap(G, s):
         v = heappop(edge)
         if v[2] not in E:
             E.add(v[2])
-            d[v[2]] = v[0]
-            p[v[2]] = p[v[1]] + [v[2]]
+            distances[v[2]] = v[0]
+            paths[v[2]] = paths[v[1]] + [v[2]]
             for values in G[v[2]]:
                 if values[0] not in E:
                     heappush(edge, (v[0] + values[1], v[2], values[0]))
         continue
-    return p
+    return paths
 
 
 def suurballe(G, start, end):
