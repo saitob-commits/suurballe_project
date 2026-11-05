@@ -367,7 +367,25 @@ def main():
                         mode = "edit"
 
                 elif event.type == pygame.MOUSEBUTTONDOWN:
-                    if event.button == 1 and CANVAS_TOP <= event.pos[1] <= CANVAS_BOTTOM:
+                    if event.button == 3 and mode in ("edit", "set_start", "set_end"):
+                        for node in list(nodes):
+                            if math.dist(event.pos, node) <= NODE_R:
+                                nodes.remove(node)
+                                edges = [(a, b, w) for (a, b, w) in edges if a != node and b != node]
+                                if node in graph:
+                                    del graph[node]
+                                for key in graph:
+                                    graph[key] = [(nb, w) for (nb, w) in graph[key] if nb != node]
+                                if node in selected:
+                                    selected.remove(node)
+                                if start == node:
+                                    start = None
+                                if end == node:
+                                    end = None
+                                output = None
+                                result_ok = False
+                                break
+                    elif event.button == 1 and CANVAS_TOP <= event.pos[1] <= CANVAS_BOTTOM:
                         if mode == "result":
                             continue
                         clicked = None
@@ -419,6 +437,7 @@ def main():
                 "  - Click empty space to drop a numbered node.",
                 "  - Click one node, then another, to start an edge.",
                 "  - Type the distance (a number) and press ENTER.",
+                "  - Right-click a node to delete it and its roads.",
                 "",
                 "CHOOSE endpoints:",
                 "  - Click 'Set Start', then click a node (turns green).",
